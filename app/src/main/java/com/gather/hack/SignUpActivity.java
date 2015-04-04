@@ -1,5 +1,8 @@
 package com.gather.hack;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,10 +17,18 @@ import java.text.ParseException;
 
 public class SignUpActivity extends ActionBarActivity {
 
+    public String uname;
+    public String pw;
+    public Context thisContext = this;
+    public SharedPreferences pref;
+    public SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        pref = getSharedPreferences("userInfo", MODE_PRIVATE);
+        editor = pref.edit();
     }
 
     public void register(View view)
@@ -28,17 +39,22 @@ public class SignUpActivity extends ActionBarActivity {
         EditText phoneNumField = (EditText) findViewById(R.id.phonenum);
 
         ParseUser user = new ParseUser();
-        user.setUsername("my name");
-        user.setPassword("my pass");
-        user.setEmail("email@example.com");
-
+        uname = usernameField.getText().toString();
+        pw = passwordField.getText().toString();
+        user.setUsername(uname);
+        user.setPassword(pw);
         // other fields can be set just like with ParseObject
-        user.put("phone", "650-253-0000");
-
+        user.put("phone", phoneNumField.getText().toString());
         user.signUpInBackground(new SignUpCallback() {
             public void done(com.parse.ParseException e) {
                 if (e == null) {
                     // Hooray! Let them use the app now.
+                    editor.putString("username", uname);
+                    editor.putString("password", pw);
+                    editor.commit();
+
+                    Intent intent = new Intent(thisContext, EventsActivity.class);
+                    startActivity(intent);
                 } else {
                     // Sign up didn't succeed. Look at the ParseException
                     // to figure out what went wrong
