@@ -23,16 +23,14 @@ public class MainActivity extends ActionBarActivity {
 
         Parse.initialize(this, "rlHChGDkkSHCUy9E4rLL7P064XpQm4iaHG2tWdub", "WJKWdbLyVXhT8aGBcIoz8eaagx3PQ7C9gFRPJZHX");
 
-        ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("foo", "bar");
-        testObject.saveInBackground();
+
 
 
     }
 
 
     public void goToLogin(View view) {
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, SignupActivity.class);
         startActivity(intent);
     }
 
