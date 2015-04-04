@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gather.hack" >
 
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -29,6 +28,18 @@
             android:name=".SignupActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login" >
+        </activity>
+        <activity
+            android:name=".SignUpActivity"
+            android:label="@string/title_activity_sign_up" >
+        </activity>
+        <activity
+            android:name=".EventsActivity"
+            android:label="@string/title_activity_events" >
         </activity>
     </application>
 

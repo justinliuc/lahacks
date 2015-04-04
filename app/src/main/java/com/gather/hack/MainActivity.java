@@ -1,37 +1,70 @@
 package com.gather.hack;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.MenuItem;
 
+import com.parse.LogInCallback;
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
+
+import java.io.File;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    public Context thisContext = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         // Enable Local Datastore.
         Parse.enableLocalDatastore(this);
 
         Parse.initialize(this, "rlHChGDkkSHCUy9E4rLL7P064XpQm4iaHG2tWdub", "WJKWdbLyVXhT8aGBcIoz8eaagx3PQ7C9gFRPJZHX");
+        SharedPreferences userInfo = getPreferences(MODE_PRIVATE);
+        if(userInfo.contains("username"))
+        {
+            //that means account already created, load the info and go to event page
+            String name = userInfo.getString("username", "no name");
+            String pw = userInfo.getString("password", "no pw");
+            if ( pw.equals("no pw") || name.equals("no name") ) // someone fucked up
+            {
+                // go to new account intent
+            }
+            ParseUser.logInInBackground(name, pw, new LogInCallback() {
+                @Override
+                public void done(ParseUser parseUser, ParseException e) {
+                    if ( parseUser != null ) {
+                        Intent intent = new Intent(thisContext, EventsActivity.class);
+                        startActivity(intent);
+                    }
+                    else {
+                        Intent intent = new Intent(thisContext, LoginActivity.class);
+                        startActivity(intent);
+                    }
+                }
+            });
+        }
+        else
+        {
+            // files does not already exist, that means account never created go to pick between
+            // sign up and login
+
+            Intent intent = new Intent(this, SignUpActivity.class);
+            startActivity(intent);
+        }
 
 
 
-
-    }
-
-
-    public void goToLogin(View view) {
-        Intent intent = new Intent(this, SignupActivity.class);
-        startActivity(intent);
     }
 
 
